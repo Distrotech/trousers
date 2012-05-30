@@ -442,7 +442,6 @@ obj_nvstore_get_writedigestatrelease(TSS_HNVSTORE hNvstore, UINT32 *size, BYTE *
 	UINT32 data_public_size = MAX_PUBLIC_DATA_SIZE;
 	UINT32 offset;
 	UINT16 pcrread_sizeOfSelect;
-	UINT16 pcrwrite_sizeOfSelect;
 	TSS_HCONTEXT tspContext;
 	TSS_RESULT result;
 
@@ -466,7 +465,7 @@ obj_nvstore_get_writedigestatrelease(TSS_HNVSTORE hNvstore, UINT32 *size, BYTE *
 			+ sizeof(TPM_LOCALITY_SELECTION)
 			+ sizeof(TPM_COMPOSITE_HASH);
 
-	pcrwrite_sizeOfSelect = Decode_UINT16(nv_data_public + offset);
+	Decode_UINT16(nv_data_public + offset);
 	offset = offset + sizeof(UINT16) + pcrread_sizeOfSelect + sizeof(TPM_LOCALITY_SELECTION);
 	memcpy(*data, nv_data_public + offset, sizeof(TPM_COMPOSITE_HASH));
 

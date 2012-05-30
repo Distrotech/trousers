@@ -33,7 +33,7 @@ tcs_wrap_GetPcrEvent(struct tcsd_thread_data *data)
 	TCS_CONTEXT_HANDLE hContext;
 	TSS_PCR_EVENT *pEvent = NULL;
 	TSS_RESULT result;
-	UINT32 pcrIndex, number, totalSize;
+	UINT32 pcrIndex, number;
 	BYTE lengthOnly;
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 0, &hContext, 0, &data->comm))
@@ -56,11 +56,6 @@ tcs_wrap_GetPcrEvent(struct tcsd_thread_data *data)
 		result = TCS_GetPcrEvent_Internal(hContext, pcrIndex, &number, &pEvent);
 
 	if (result == TSS_SUCCESS) {
-		if (lengthOnly == FALSE)
-			totalSize = get_pcr_event_size(pEvent);
-		else
-			totalSize = 0;
-
 		initData(&data->comm, 2);
 		if (setData(TCSD_PACKET_TYPE_UINT32, 0, &number, 0, &data->comm)) {
 			if (lengthOnly == FALSE)

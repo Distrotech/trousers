@@ -427,13 +427,13 @@ obj_encdata_remove(TSS_HOBJECT hObject, TSS_HCONTEXT tspContext)
 void
 obj_encdata_remove_policy_refs(TSS_HPOLICY hPolicy, TSS_HCONTEXT tspContext)
 {
-	struct tsp_object *obj, *prev = NULL;
+	struct tsp_object *obj;
 	struct obj_list *list = &encdata_list;
 	struct tr_encdata_obj *encdata;
 
 	pthread_mutex_lock(&list->lock);
 
-	for (obj = list->head; obj; prev = obj, obj = obj->next) {
+	for (obj = list->head; obj; obj = obj->next) {
 		if (obj->tspContext != tspContext)
 			continue;
 

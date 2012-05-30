@@ -86,7 +86,7 @@ void
 obj_delfamily_find_by_familyid(TSS_HOBJECT hObject, UINT32 familyID, TSS_HDELFAMILY *hFamily)
 {
 	TSS_HCONTEXT hContext;
-	struct tsp_object *obj, *prev = NULL;
+	struct tsp_object *obj;
 	struct obj_list *list = &delfamily_list;
 	struct tr_delfamily_obj *delfamily;
 
@@ -100,7 +100,7 @@ obj_delfamily_find_by_familyid(TSS_HOBJECT hObject, UINT32 familyID, TSS_HDELFAM
 	} else
 		hContext = (TSS_HCONTEXT)hObject;
 
-	for (obj = list->head; obj; prev = obj, obj = obj->next) {
+	for (obj = list->head; obj; obj = obj->next) {
 		if (obj->tspContext != hContext)
 			continue;
 

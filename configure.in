@@ -33,9 +33,6 @@ else
 	fi
 fi
 
-#FIXME: can't reproduce the unused variable issues, placing this workaround for now.
-CFLAGS="${CFLAGS} -Wno-unused-but-set-variable
-
 # Arch specific stuff
 case $target in
         *ppc64* | *powerpc64* | *x86_64*)
