@@ -263,7 +263,7 @@ Tspi_TPM_Quote2(TSS_HTPM        hTPM,            // in
 
 
 	if(*versionInfoSize > 0) {
-		if(fAddVersion) {
+		if(fAddVersion && pValidationData) {
 			/* tag versionInfo so that it can be free'd by the app through Tspi_Context_FreeMemory */
 			if ((result = __tspi_add_mem_entry(tspContext, *versionInfo))) {
 				free_tspi(tspContext, pValidationData->rgbValidationData);

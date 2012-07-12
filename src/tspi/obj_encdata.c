@@ -302,6 +302,11 @@ obj_encdata_get_pcr_selection(TSS_HENCDATA hEncData,
 			goto done;
 	}
 
+	if (selection == NULL) {
+		result = TSPERR(TSS_E_INVALID_OBJ_ACCESS);
+		goto done;
+	}
+
 	*size = sizeof(UINT16) + selection->sizeOfSelect;
 
 	if ((*data = calloc_tspi(obj->tspContext, *size)) == NULL) {
