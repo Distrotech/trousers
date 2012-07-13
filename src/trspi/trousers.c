@@ -2218,7 +2218,7 @@ Trspi_UnloadBlob_CERTIFY_INFO(UINT64 *offset, BYTE *blob, TPM_CERTIFY_INFO *c)
         if (c->PCRInfoSize != 0) {
                 c->PCRInfo = malloc(sizeof(TPM_PCR_INFO));
                 if (c->PCRInfo == NULL) {
-                        LogError("malloc of %lu bytes failed.", sizeof(TPM_PCR_INFO));
+                        LogError("malloc of %zd bytes failed.", sizeof(TPM_PCR_INFO));
                         return TSPERR(TSS_E_OUTOFMEMORY);
                 }
         } else {
