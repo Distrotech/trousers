@@ -1624,6 +1624,7 @@ Trspi_UNICODE_To_Native(BYTE *string, unsigned *size)
 
 	if ((tmplen = hacky_strlen("UTF-16", string)) == 0) {
 		LogDebug("hacky_strlen returned 0");
+		iconv_close(cd);
 		return 0;
 	}
 

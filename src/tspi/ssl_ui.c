@@ -51,6 +51,7 @@ static TSS_RESULT do_ui(BYTE *string, UINT32 *string_len, BYTE *popup, int verif
 	unicode = Trspi_Native_To_UNICODE((BYTE *)pin_buf, string_len);
 	memset(string, 0, UI_MAX_SECRET_STRING_LENGTH);
 	memcpy(string, unicode, *string_len);
+	free(unicode);
  out:
 	UI_free(ui);
  no_ui:

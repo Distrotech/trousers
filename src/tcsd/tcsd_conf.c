@@ -107,6 +107,7 @@ platform_class_list_append(struct tcsd_config *conf, char *specName, TSS_BOOL is
 			new_class->classURI = malloc(new_class->classURISize);
 			if (new_class->classURI == NULL) {
 				LogError("malloc of %u bytes failed", new_class->classURISize);
+				free(new_class);
 				return TCSERR(TSS_E_OUTOFMEMORY);
 			}
 			memcpy(new_class->classURI, tcg_platform_specs[i].specURI,

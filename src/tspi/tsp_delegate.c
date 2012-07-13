@@ -135,8 +135,10 @@ create_owner_delegation(TSS_HTPM       hTpm,
 
 	if ((result = authsess_xsap_init(hContext, hTpm, hDelegation, TSS_AUTH_POLICY_NOT_REQUIRED,
 					 TPM_ORD_Delegate_CreateOwnerDelegation, TPM_ET_OWNER,
-					 &xsap)))
+					 &xsap))) {
+		free(publicInfo);
 		return result;
+	}
 
 	result = Trspi_HashInit(&hashCtx, TSS_HASH_SHA1);
 	result |= Trspi_Hash_UINT32(&hashCtx, TPM_ORD_Delegate_CreateOwnerDelegation);
@@ -222,8 +224,10 @@ create_key_delegation(TSS_HKEY       hKey,
 
 	if ((result = authsess_xsap_init(hContext, hKey, hDelegation, TSS_AUTH_POLICY_REQUIRED,
 					 TPM_ORD_Delegate_CreateKeyDelegation, TPM_ET_KEYHANDLE,
-					 &xsap)))
+					 &xsap))) {
+		free(publicInfo);
 		return result;
+	}
 
 	result = Trspi_HashInit(&hashCtx, TSS_HASH_SHA1);
 	result |= Trspi_Hash_UINT32(&hashCtx, TPM_ORD_Delegate_CreateKeyDelegation);
