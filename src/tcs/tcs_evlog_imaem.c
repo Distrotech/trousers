@@ -80,27 +80,27 @@ ima_get_entries_by_pcr(FILE *handle, UINT32 pcr_index, UINT32 first,
 	char page[IMA_READ_SIZE];
 	int error_path = 1, ptr = 0;
 	UINT32 copied_events = 0, i;
-	struct event_wrapper *list = calloc(1, sizeof(struct event_wrapper));
-	struct event_wrapper *cur = list;
+	struct event_wrapper *list, *cur;
 	TSS_RESULT result = TCSERR(TSS_E_INTERNAL_ERROR);
 	FILE *fp = (FILE *) handle;
 	uint len;
 	char name[255];
 
+	if (!fp) {
+		LogError("File handle is NULL!\n");
+		return 1;
+	}
+
+	if (*count == 0)
+		return TSS_SUCCESS;
+
+	list = calloc(1, sizeof(struct event_wrapper));
 	if (list == NULL) {
 		LogError("malloc of %zd bytes failed.", sizeof(struct event_wrapper));
 		return TCSERR(TSS_E_OUTOFMEMORY);
 	}
+	cur = list;
 
-	if (*count == 0) {
-		result = TSS_SUCCESS;
-		goto free_list;
-	}
-
-	if (!fp) {
-		perror("unable to open file\n");
-		return 1;
-	}
 	rewind(fp);
 
         while (fread(page, 24, 1, fp)) {
