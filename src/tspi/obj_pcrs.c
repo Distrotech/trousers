@@ -71,9 +71,11 @@ pcrs_free(void *data)
 	switch (pcrs->type) {
 		case TSS_PCRS_STRUCT_INFO:
 			free(pcrs->info.info11.pcrSelection.pcrSelect);
+			free(pcrs->pcrs);
 			break;
 		case TSS_PCRS_STRUCT_INFO_SHORT:
 			free(pcrs->info.infoshort.pcrSelection.pcrSelect);
+			free(pcrs->pcrs);
 			break;
 		case TSS_PCRS_STRUCT_INFO_LONG:
 			free(pcrs->info.infolong.creationPCRSelection.pcrSelect);

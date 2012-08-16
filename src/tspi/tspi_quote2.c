@@ -163,11 +163,13 @@ Tspi_TPM_Quote2(TSS_HTPM        hTPM,            // in
 		offset = 0;
 		if ((result = Trspi_UnloadBlob_PCR_INFO_SHORT(&offset, pcrDataOut, &pcrInfo))) {
 			free(pcrDataOut);
+			free(pcrInfo.pcrSelection.pcrSelect);
 			if (*versionInfoSize > 0)
 				free(*versionInfo);
 			free(sig);
 			return result;
 		}
+		free(pcrInfo.pcrSelection.pcrSelect);
 
 		/* Set both digestAtRelease and localityAtRelease */
 		if ((result = obj_pcrs_set_locality(hPcrComposite, pcrInfo.localityAtRelease))) {
