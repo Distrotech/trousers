@@ -19,7 +19,7 @@
 #include "hosttable.h"
 #include "obj.h"
 
-struct host_table *ht = NULL;
+static struct host_table *ht = NULL;
 
 TSS_RESULT
 host_table_init()
