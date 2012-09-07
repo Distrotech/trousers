@@ -717,7 +717,7 @@ tpm_rsp_parse(TPM_COMMAND_CODE ordinal, BYTE *b, UINT32 len, ...)
 		*data_len = offset2;
 		break;
 	}
-	/* TPM BLOB: BLOB, optional DIGEST */
+	/* TPM BLOB: TPM_PUBKEY, optional DIGEST */
 	case TPM_ORD_CreateEndorsementKeyPair:
 	case TPM_ORD_ReadPubek:
 	{
@@ -731,14 +731,18 @@ tpm_rsp_parse(TPM_COMMAND_CODE ordinal, BYTE *b, UINT32 len, ...)
 			return TCSERR(TSS_E_INTERNAL_ERROR);
 		}
 
-		if ((offset2 + TPM_DIGEST_SIZE) > TSS_TPM_TXBLOB_SIZE)
-			return TCSERR(TSS_E_INTERNAL_ERROR);
-
 		if (digest1) {
 			offset1 = offset2 = len - TPM_DIGEST_SIZE;
 			memcpy(digest1, &b[offset2], TPM_DIGEST_SIZE);
-		} else
+
+			if ((offset2 + TPM_DIGEST_SIZE) > TSS_TPM_TXBLOB_SIZE)
+				return TCSERR(TSS_E_INTERNAL_ERROR);
+		} else {
 			offset2 = len;
+
+			if (offset2 > TSS_TPM_TXBLOB_SIZE)
+				return TCSERR(TSS_E_INTERNAL_ERROR);
+		}
 
 		offset1 = TSS_TPM_TXBLOB_HDR_LEN;
 		offset2 -= offset1;
