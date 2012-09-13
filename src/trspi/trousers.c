@@ -104,9 +104,6 @@ Trspi_LoadBlob(UINT64 *offset, size_t size, BYTE *to, BYTE *from)
 	if (size == 0)
 		return;
 
-	if ((*offset + size) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (to)
 		memcpy(&to[(*offset)], from, size);
 	(*offset) += size;
@@ -118,9 +115,6 @@ Trspi_UnloadBlob(UINT64 *offset, size_t size, BYTE *from, BYTE *to)
 	if (size <= 0)
 		return;
 
-	if ((*offset + size) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (to)
 		memcpy(to, &from[*offset], size);
 	(*offset) += size;
@@ -129,9 +123,6 @@ Trspi_UnloadBlob(UINT64 *offset, size_t size, BYTE *from, BYTE *to)
 void
 Trspi_LoadBlob_BYTE(UINT64 *offset, BYTE data, BYTE *blob)
 {
-	if ((*offset + sizeof(BYTE)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (blob)
 		blob[*offset] = data;
 	(*offset)++;
@@ -140,9 +131,6 @@ Trspi_LoadBlob_BYTE(UINT64 *offset, BYTE data, BYTE *blob)
 void
 Trspi_UnloadBlob_BYTE(UINT64 *offset, BYTE *dataOut, BYTE *blob)
 {
-	if ((*offset + sizeof(BYTE)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (dataOut)
 		*dataOut = blob[*offset];
 	(*offset)++;
@@ -167,9 +155,6 @@ Trspi_UnloadBlob_BOOL(UINT64 *offset, TSS_BOOL *dataOut, BYTE *blob)
 void
 Trspi_LoadBlob_UINT64(UINT64 *offset, UINT64 in, BYTE *blob)
 {
-	if ((*offset + sizeof(UINT64)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (blob)
 		UINT64ToArray(in, &blob[*offset]);
 	(*offset) += sizeof(UINT64);
@@ -178,9 +163,6 @@ Trspi_LoadBlob_UINT64(UINT64 *offset, UINT64 in, BYTE *blob)
 void
 Trspi_LoadBlob_UINT32(UINT64 *offset, UINT32 in, BYTE *blob)
 {
-	if ((*offset + sizeof(UINT32)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (blob)
 		UINT32ToArray(in, &blob[*offset]);
 	(*offset) += sizeof(UINT32);
@@ -189,9 +171,6 @@ Trspi_LoadBlob_UINT32(UINT64 *offset, UINT32 in, BYTE *blob)
 void
 Trspi_LoadBlob_UINT16(UINT64 *offset, UINT16 in, BYTE *blob)
 {
-	if ((*offset + sizeof(UINT16)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (blob)
 		UINT16ToArray(in, &blob[*offset]);
 	(*offset) += sizeof(UINT16);
@@ -200,9 +179,6 @@ Trspi_LoadBlob_UINT16(UINT64 *offset, UINT16 in, BYTE *blob)
 void
 Trspi_UnloadBlob_UINT64(UINT64 *offset, UINT64 *out, BYTE *blob)
 {
-	if ((*offset + sizeof(UINT64)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (out)
 		*out = Decode_UINT64(&blob[*offset]);
 	(*offset) += sizeof(UINT64);
@@ -211,9 +187,6 @@ Trspi_UnloadBlob_UINT64(UINT64 *offset, UINT64 *out, BYTE *blob)
 void
 Trspi_UnloadBlob_UINT32(UINT64 *offset, UINT32 *out, BYTE *blob)
 {
-	if ((*offset + sizeof(UINT32)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (out)
 		*out = Decode_UINT32(&blob[*offset]);
 	(*offset) += sizeof(UINT32);
@@ -222,9 +195,6 @@ Trspi_UnloadBlob_UINT32(UINT64 *offset, UINT32 *out, BYTE *blob)
 void
 Trspi_UnloadBlob_UINT16(UINT64 *offset, UINT16 *out, BYTE *blob)
 {
-	if ((*offset + sizeof(UINT16)) > TSS_TPM_TXBLOB_SIZE)
-		return;
-
 	if (out)
 		*out = Decode_UINT16(&blob[*offset]);
 	(*offset) += sizeof(UINT16);
