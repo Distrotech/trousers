@@ -36,5 +36,6 @@ struct tcsd_comm_data {
 } STRUCTURE_PACKING_ATTRIBUTE;
 
 #define TCSD_INIT_TXBUF_SIZE	1024
+#define TCSD_INCR_TXBUF_SIZE	4096
 
 #endif
