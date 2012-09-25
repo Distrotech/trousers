@@ -182,11 +182,6 @@ ctx_verify_context(TCS_CONTEXT_HANDLE tcsContext)
 {
 	struct tcs_context *c;
 
-	if (tcsContext == InternalContext) {
-		LogDebug("Success: %x is an Internal Context", tcsContext);
-		return TSS_SUCCESS;
-	}
-
 	MUTEX_LOCK(tcs_ctx_lock);
 
 	c = get_context(tcsContext);

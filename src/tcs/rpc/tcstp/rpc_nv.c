@@ -55,6 +55,9 @@ tcs_wrap_NV_DefineOrReleaseSpace(struct tcsd_thread_data *data)
 	if (getData(TCSD_PACKET_TYPE_UINT32, 0, &hContext, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
 
+	if ((result = ctx_verify_context(hContext)))
+		goto done;
+
 	if (getData(TCSD_PACKET_TYPE_UINT32, 1, &cPubInfoSize, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
 
@@ -96,7 +99,7 @@ tcs_wrap_NV_DefineOrReleaseSpace(struct tcsd_thread_data *data)
 			}
 		}
 	} else
-		initData(&data->comm, 0);
+done:		initData(&data->comm, 0);
 
 	data->comm.hdr.u.result = result;
 	return TSS_SUCCESS;
@@ -114,6 +117,9 @@ tcs_wrap_NV_WriteValue(struct tcsd_thread_data *data)
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 0, &hContext, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
+
+	if ((result = ctx_verify_context(hContext)))
+		goto done;
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 1, &hNVStore, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
@@ -157,7 +163,7 @@ tcs_wrap_NV_WriteValue(struct tcsd_thread_data *data)
 			}
 		}
 	} else
-		initData(&data->comm, 0);
+done:		initData(&data->comm, 0);
 
 	data->comm.hdr.u.result = result;
 	return TSS_SUCCESS;
@@ -175,6 +181,9 @@ tcs_wrap_NV_WriteValueAuth(struct tcsd_thread_data *data)
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 0, &hContext, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
+
+	if ((result = ctx_verify_context(hContext)))
+		goto done;
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 1, &hNVStore, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
@@ -217,7 +226,7 @@ tcs_wrap_NV_WriteValueAuth(struct tcsd_thread_data *data)
 			}
 		}
 	} else
-		initData(&data->comm, 0);
+done:		initData(&data->comm, 0);
 
 	data->comm.hdr.u.result = result;
 	return TSS_SUCCESS;
@@ -235,6 +244,9 @@ tcs_wrap_NV_ReadValue(struct tcsd_thread_data *data)
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 0, &hContext, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
+
+	if ((result = ctx_verify_context(hContext)))
+		goto done;
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 1, &hNVStore, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
@@ -276,7 +288,7 @@ tcs_wrap_NV_ReadValue(struct tcsd_thread_data *data)
 		}
 		free(rgbDataRead);
 	} else
-		initData(&data->comm, 0);
+done:		initData(&data->comm, 0);
 
 	data->comm.hdr.u.result = result;
 	return TSS_SUCCESS;
@@ -294,6 +306,9 @@ tcs_wrap_NV_ReadValueAuth(struct tcsd_thread_data *data)
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 0, &hContext, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
+
+	if ((result = ctx_verify_context(hContext)))
+		goto done;
 
 	if (getData(TCSD_PACKET_TYPE_UINT32, 1, &hNVStore, 0, &data->comm))
 		return TCSERR(TSS_E_INTERNAL_ERROR);
@@ -336,7 +351,7 @@ tcs_wrap_NV_ReadValueAuth(struct tcsd_thread_data *data)
 		}
 		free(rgbDataRead);
 	} else
-		initData(&data->comm, 0);
+done:		initData(&data->comm, 0);
 
 	data->comm.hdr.u.result = result;
 	return TSS_SUCCESS;

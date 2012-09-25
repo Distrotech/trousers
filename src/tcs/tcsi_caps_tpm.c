@@ -42,9 +42,6 @@ TCSP_GetCapability_Internal(TCS_CONTEXT_HANDLE hContext,	/* in */
 
 	LogDebug("Entering Get Cap");
 
-	if ((result = ctx_verify_context(hContext)))
-		return result;
-
 	if ((result = tpm_rqu_build(TPM_ORD_GetCapability, &offset, txBlob, capArea, subCapSize,
 				    subCap, NULL)))
 		return result;
