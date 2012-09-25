@@ -576,7 +576,8 @@ dispatchCommand(struct tcsd_thread_data *data)
 		return TCSERR(TSS_E_FAIL);
 	}
 
-	LogDebug("Dispatching ordinal %u", data->comm.hdr.u.ordinal);
+	LogDebug("Dispatching ordinal %u (%s)", data->comm.hdr.u.ordinal,
+		 tcs_func_table[data->comm.hdr.u.ordinal].name);
 	/* We only need to check access_control if there are remote operations that are defined
 	 * in the config file, which means we allow remote connections */
 	if (tcsd_options.remote_ops[0] && access_control(data)) {
@@ -617,11 +618,11 @@ dispatchCommand(struct tcsd_thread_data *data)
 TSS_RESULT
 getTCSDPacket(struct tcsd_thread_data *data)
 {
-        /* make sure the all the data is present */
-	if (data->comm.hdr.num_parms > 0 &&
-	    data->comm.hdr.packet_size !=
-		(UINT32)(data->comm.hdr.parm_offset + data->comm.hdr.parm_size))
+	if (data->comm.hdr.packet_size !=
+	    (UINT32)(data->comm.hdr.parm_offset + data->comm.hdr.parm_size)) {
+		LogError("Invalid packet received by TCSD");
 		return TCSERR(TSS_E_INTERNAL_ERROR);
+	}
 
 	/* dispatch the command to the TCS */
 	return dispatchCommand(data);

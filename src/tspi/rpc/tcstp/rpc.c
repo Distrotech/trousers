@@ -39,12 +39,9 @@ initData(struct tcsd_comm_data *comm, int parm_count)
 	/* min packet size should be the size of the header */
 	memset(&comm->hdr, 0, sizeof(struct tcsd_packet_hdr));
 	comm->hdr.packet_size = sizeof(struct tcsd_packet_hdr);
-	if (parm_count > 0) {
-		comm->hdr.type_offset = sizeof(struct tcsd_packet_hdr);
-		comm->hdr.parm_offset = comm->hdr.type_offset +
-					(sizeof(TCSD_PACKET_TYPE) * parm_count);
-		comm->hdr.packet_size = comm->hdr.parm_offset;
-	}
+	comm->hdr.type_offset = sizeof(struct tcsd_packet_hdr);
+	comm->hdr.parm_offset = comm->hdr.type_offset + (sizeof(TCSD_PACKET_TYPE) * parm_count);
+	comm->hdr.packet_size = comm->hdr.parm_offset;
 
 	memset(comm->buf, 0, comm->buf_size);
 }
