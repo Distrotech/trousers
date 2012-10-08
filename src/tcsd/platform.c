@@ -52,6 +52,7 @@ platform_get_runlevel()
 
 	ut.ut_type = RUN_LVL;
 
+	setutent();
 	next = getutid(&ut);
 
 	while (next != NULL) {
