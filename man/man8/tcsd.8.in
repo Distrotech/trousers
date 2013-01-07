@@ -93,8 +93,9 @@ can be supressed by setting the TSS_DEBUG_OFF environment variable.
 .SH "DEVICE DRIVERS"
 .PP
 \fBtcsd\fR is compatible with the IBM Research TPM device driver available
-from http://www.research.ibm.com/gsal/tcpa and the TPM device driver available
-from http://sf.net/projects/tmpdd
+from http://ibmswtpm.sourceforge.net/ and the TPM device driver available
+from http://sf.net/projects/tpmdd, which is also available in the upstream
+Linux kernel and many Linux distros.
 
 .SH "CONFORMING TO"
 .PP
