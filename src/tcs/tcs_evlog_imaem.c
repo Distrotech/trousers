@@ -168,9 +168,7 @@ ima_get_entries_by_pcr(FILE *handle, UINT32 pcr_index, UINT32 first,
 		}
 
 		copied_events++;
-printf("%d %s ", copied_events, name);
 
-printf("%s\n", cur->event.rgbEvent);
 		if (copied_events == *count)
 			goto copy_events;
 
@@ -188,7 +186,6 @@ copy_events:
 	/* we've copied all the events we need to from this PCR, now
 	 * copy them all into one contiguous memory block
 	 */
-printf("copied_events: %d\n", copied_events);
 	*events = calloc(copied_events, sizeof(TSS_PCR_EVENT));
 	if (*events == NULL) {
 		LogError("malloc of %zd bytes failed.", copied_events * sizeof(TSS_PCR_EVENT));
@@ -333,7 +330,6 @@ ima_get_entry(FILE *handle, UINT32 pcr_index, UINT32 *num, TSS_PCR_EVENT **ppEve
 		}
 		fseek(fp, len, SEEK_CUR);
 		seen_indices++;
-		printf("%d - index\n", seen_indices);
 	}
 done:
 	if (ppEvent == NULL)
