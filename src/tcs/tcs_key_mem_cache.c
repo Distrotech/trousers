@@ -1099,8 +1099,11 @@ owner_evict_init()
 							  sizeof(UINT32), (BYTE *)&keyHandle,
 							  &respDataSize, &respData);
 		/* special case, invalid keys are automatically evicted later */
-		if (result == TPM_E_INVALID_KEYHANDLE)
+		if (result == TPM_E_INVALID_KEYHANDLE) {
+			result = TSS_SUCCESS;
 			continue;
+		}
+
 		if (result != TSS_SUCCESS) {
 			free(keyList.handle);
 			return result;
