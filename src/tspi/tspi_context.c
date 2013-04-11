@@ -359,6 +359,10 @@ Tspi_Context_CloseObject(TSS_HCONTEXT tspContext,	/* in */
 #ifdef TSS_BUILD_CMK
 		result = obj_migdata_remove(hObject, tspContext);
 #endif
+	} else if (obj_is_nvstore(hObject)) {
+#ifdef TSS_BUILD_NV
+		result = obj_nvstore_remove(hObject, tspContext);
+#endif
 	} else {
 		result = TSPERR(TSS_E_INVALID_HANDLE);
 	}
