@@ -103,7 +103,7 @@ Tspi_TPM_CollateIdentityRequest(TSS_HTPM hTPM,				/* in */
 		return result;
 
 	/* setup the symmetric key's parms. */
-	memset(&symParms, 0, sizeof(TCPA_KEY_PARMS));
+	__tspi_memset(&symParms, 0, sizeof(TCPA_KEY_PARMS));
 	switch (algID) {
 		case TSS_ALG_AES:
 			symParms.algorithmID = TCPA_ALG_AES;
@@ -155,7 +155,7 @@ Tspi_TPM_CollateIdentityRequest(TSS_HTPM hTPM,				/* in */
 		return result;
 
 	offset = 0;
-	memset(&caKey, 0, sizeof(TSS_KEY));
+	__tspi_memset(&caKey, 0, sizeof(TSS_KEY));
 	if ((result = UnloadBlob_TSS_KEY(&offset, caKeyBlob, &caKey)))
 		return result;
 

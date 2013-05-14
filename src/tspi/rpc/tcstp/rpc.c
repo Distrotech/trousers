@@ -37,13 +37,13 @@ void
 initData(struct tcsd_comm_data *comm, int parm_count)
 {
 	/* min packet size should be the size of the header */
-	memset(&comm->hdr, 0, sizeof(struct tcsd_packet_hdr));
+	__tspi_memset(&comm->hdr, 0, sizeof(struct tcsd_packet_hdr));
 	comm->hdr.packet_size = sizeof(struct tcsd_packet_hdr);
 	comm->hdr.type_offset = sizeof(struct tcsd_packet_hdr);
 	comm->hdr.parm_offset = comm->hdr.type_offset + (sizeof(TCSD_PACKET_TYPE) * parm_count);
 	comm->hdr.packet_size = comm->hdr.parm_offset;
 
-	memset(comm->buf, 0, comm->buf_size);
+	__tspi_memset(comm->buf, 0, comm->buf_size);
 }
 
 int
@@ -352,7 +352,7 @@ send_init(struct host_table_entry *hte)
 		goto err_exit;
 	}
 
-	memset(&addr, 0, sizeof(addr));
+	__tspi_memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(get_port());
 

@@ -392,7 +392,7 @@ __tspi_build_delegate_public_info(BYTE           bLabel,
 	if ((result = obj_pcrs_create_info_short(hPcrs, &pcrInfoSize, &pcrInfo)))
 		return result;
 
-	memset(&public, 0, sizeof(public));
+	__tspi_memset(&public, 0, sizeof(public));
 	public.tag = TPM_TAG_DELEGATE_PUBLIC;
 	public.label.label = bLabel;
 	offset = 0;

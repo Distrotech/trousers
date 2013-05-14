@@ -125,7 +125,7 @@ Tspi_TPM_Quote(TSS_HTPM hTPM,				/* in */
 	if (hPcrComposite) {
 		TCPA_PCR_COMPOSITE pcrComp;
 
-		memset(&pcrComp, 0, sizeof(pcrComp)); 
+		__tspi_memset(&pcrComp, 0, sizeof(pcrComp)); 
 		offset = 0;
 		if ((result = Trspi_UnloadBlob_PCR_COMPOSITE(&offset, pcrDataOut, &pcrComp))) {
 			free(pcrDataOut);
@@ -156,7 +156,7 @@ Tspi_TPM_Quote(TSS_HTPM hTPM,				/* in */
 
 	/* create the validation data */
 	offset = 0;
-	memset(&keyContainer, 0, sizeof(TSS_KEY));
+	__tspi_memset(&keyContainer, 0, sizeof(TSS_KEY));
 	if ((result = UnloadBlob_TSS_KEY(&offset, keyData, &keyContainer)))
 		return result;
 

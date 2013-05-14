@@ -250,7 +250,7 @@ obj_pcrs_set_value(TSS_HPCRS hPcrs, UINT32 idx, UINT32 size, BYTE *value)
 			goto done;
 		}
 		select->sizeOfSelect = bytes_to_hold;
-		memset(select->pcrSelect, 0, bytes_to_hold);
+		__tspi_memset(select->pcrSelect, 0, bytes_to_hold);
 
 		/* allocate the pcr array */
 		if ((pcrs->pcrs = malloc(bytes_to_hold * 8 *
@@ -267,8 +267,8 @@ obj_pcrs_set_value(TSS_HPCRS hPcrs, UINT32 idx, UINT32 size, BYTE *value)
 			goto done;
 		}
 		/* set the newly allocated bytes to 0 */
-		memset(&select->pcrSelect[select->sizeOfSelect], 0,
-				bytes_to_hold - select->sizeOfSelect);
+		__tspi_memset(&select->pcrSelect[select->sizeOfSelect], 0,
+			      bytes_to_hold - select->sizeOfSelect);
 		select->sizeOfSelect = bytes_to_hold;
 
 		/* realloc the pcrs array */
@@ -427,7 +427,7 @@ obj_pcrs_select_index(TSS_HPCRS hPcrs, UINT32 idx)
 			goto done;
 		}
 		select->sizeOfSelect = bytes_to_hold;
-		memset(select->pcrSelect, 0, bytes_to_hold);
+		__tspi_memset(select->pcrSelect, 0, bytes_to_hold);
 
 		/* alloc the pcrs array */
 		if ((pcrs->pcrs = malloc(bytes_to_hold * 8 * TCPA_SHA1_160_HASH_LEN)) == NULL) {
@@ -443,8 +443,8 @@ obj_pcrs_select_index(TSS_HPCRS hPcrs, UINT32 idx)
 			goto done;
 		}
 		/* set the newly allocated bytes to 0 */
-		memset(&select->pcrSelect[select->sizeOfSelect], 0,
-		       bytes_to_hold - select->sizeOfSelect);
+		__tspi_memset(&select->pcrSelect[select->sizeOfSelect], 0,
+			      bytes_to_hold - select->sizeOfSelect);
 		select->sizeOfSelect = bytes_to_hold;
 
 		/* realloc the pcrs array */
@@ -514,7 +514,7 @@ obj_pcrs_select_index_ex(TSS_HPCRS hPcrs, UINT32 dir, UINT32 idx)
 			goto done;
 		}
 		select->sizeOfSelect = bytes_to_hold;
-		memset(select->pcrSelect, 0, bytes_to_hold);
+		__tspi_memset(select->pcrSelect, 0, bytes_to_hold);
 
 		/* alloc the pcrs array */
 		if ((pcrs->pcrs = malloc(bytes_to_hold * 8 * TCPA_SHA1_160_HASH_LEN)) == NULL) {
@@ -530,8 +530,8 @@ obj_pcrs_select_index_ex(TSS_HPCRS hPcrs, UINT32 dir, UINT32 idx)
 			goto done;
 		}
 		/* set the newly allocated bytes to 0 */
-		memset(&select->pcrSelect[select->sizeOfSelect], 0,
-		       bytes_to_hold - select->sizeOfSelect);
+		__tspi_memset(&select->pcrSelect[select->sizeOfSelect], 0,
+			      bytes_to_hold - select->sizeOfSelect);
 		select->sizeOfSelect = bytes_to_hold;
 
 		/* realloc the pcrs array */
@@ -608,7 +608,7 @@ obj_pcrs_create_info(TSS_HPCRS hPcrs, UINT32 *size, BYTE **info)
 	pcrs = (struct tr_pcrs_obj *)obj->data;
 
 	/* Set everything that is not assigned to be all zeroes */
-	memset(&info11, 0, sizeof(info11));
+	__tspi_memset(&info11, 0, sizeof(info11));
 
 	switch (pcrs->type) {
 		case TSS_PCRS_STRUCT_INFO:
@@ -668,7 +668,7 @@ obj_pcrs_create_info_long(TSS_HPCRS hPcrs, UINT32 *size, BYTE **info)
 	pcrs = (struct tr_pcrs_obj *)obj->data;
 
 	/* Set everything that is not assigned to be all zeroes */
-	memset(&infolong, 0, sizeof(infolong));
+	__tspi_memset(&infolong, 0, sizeof(infolong));
 
 	infolong.tag = TPM_TAG_PCR_INFO_LONG;
 	/* localityAtCreation and creationPCRSelection certainly do not need to be set here, but
@@ -732,7 +732,7 @@ obj_pcrs_create_info_short(TSS_HPCRS hPcrs, UINT32 *size, BYTE **info)
 	BYTE *ret;
 
 	/* Set everything that is not assigned to be all zeroes */
-	memset(&infoshort, 0, sizeof(infoshort));
+	__tspi_memset(&infoshort, 0, sizeof(infoshort));
 
 	if (hPcrs != NULL_HPCRS) {
 		if ((obj = obj_list_get_obj(&pcrs_list, hPcrs)) == NULL)

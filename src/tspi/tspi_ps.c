@@ -58,7 +58,7 @@ Tspi_Context_LoadKeyByUUID(TSS_HCONTEXT tspContext,		/* in */
 	/* This key is in the System Persistant storage */
 	if (persistentStorageType == TSS_PS_TYPE_SYSTEM) {
 #if 1
-		memset(&info, 0, sizeof(TCS_LOADKEY_INFO));
+		__tspi_memset(&info, 0, sizeof(TCS_LOADKEY_INFO));
 
 		result = RPC_LoadKeyByUUID(tspContext, uuidData, &info, &tcsKeyHandle);
 

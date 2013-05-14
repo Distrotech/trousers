@@ -385,7 +385,7 @@ Tspi_Key_WrapKey(TSS_HKEY hKey,			/* in */
 	if ((result = obj_policy_get_secret(hMigPolicy, TR_SECRET_CTX_NEW, &migration)))
 		goto done;
 
-	memset(&keyContainer, 0, sizeof(TSS_KEY));
+	__tspi_memset(&keyContainer, 0, sizeof(TSS_KEY));
 
 	/* unload the key to be wrapped's blob */
 	offset = 0;

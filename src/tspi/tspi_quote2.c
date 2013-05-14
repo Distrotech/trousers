@@ -191,7 +191,7 @@ Tspi_TPM_Quote2(TSS_HTPM        hTPM,            // in
 	}
 
 	/* generate TPM_QUOTE_INFO2 struct */
-	memset(&quoteinfo, 0, sizeof(quoteinfo));
+	__tspi_memset(&quoteinfo, 0, sizeof(quoteinfo));
 	offset = 0;
 	/* 1. Add Structure TAG */
 	quoteinfo[offset++] = 0x00;
