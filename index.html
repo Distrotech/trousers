@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Trousers by Distrotech</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Trousers</h1>
+          <h2>Mirrror of git://git.code.sf.net/p/trousers/trousers</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/Distrotech/trousers/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/Distrotech/trousers/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/Distrotech/trousers" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>trousers README</p>
+
+<p>Trousers is an open-source TCG Software Stack (TSS), released under
+the Common Public License. Trousers aims to be compliant with the
+1.1b and 1.2 TSS specifications available from the Trusted Computing
+Group website:</p>
+
+<p><a href="http://www.trustedcomputinggroup.org">http://www.trustedcomputinggroup.org</a></p>
+
+<p>CONTACT</p>
+
+<p>For information on the TrouSerS project, please send mail to the
+following lists:</p>
+
+<p>Use of the TSS API and TrouSerS:
+  <a href="mailto:trousers-users@lists.sf.net">trousers-users@lists.sf.net</a></p>
+
+<p>Discussion of the internals of the TrouSerS implementation:
+  <a href="mailto:trousers-tech@lists.sf.net">trousers-tech@lists.sf.net</a></p>
+
+<p>Possibly sensitive security related bugs:
+  Debora Velarde <a href="mailto:dvelarde@us.ibm.com">dvelarde@us.ibm.com</a></p>
+
+<p>Run-of-the-mill bug reports should use the TrouSerS bug tracker:
+  <a href="http://sourceforge.net/tracker/?group_id=126012&amp;atid=704358">http://sourceforge.net/tracker/?group_id=126012&amp;atid=704358</a></p>
+
+<p>BUILD REQUIREMENTS</p>
+
+<p>Packages needed to build:</p>
+
+<p>automake &gt; 1.4
+  autoconf &gt; 1.4
+  pkgconfig
+  libtool
+  gtk2-devel
+  openssl-devel &gt;= 0.9.7
+  pthreads library (glibc-devel)</p>
+
+<p>BUILDING the TSS 32-bit</p>
+
+<p>Build and install the latest TPM device driver from
+sf.net/projects/tpmdd either compiled in or loaded as a
+module. UPDATE: This driver is now included in the vanilla 2.6.12
+kernel!  If you are doing this, trousers should just work after a
+vanilla build. Follow the build instructions below and read
+RUNNING the TSS, below.</p>
+
+<p>To build trousers after you have the device driver installed:</p>
+
+<p>$ sh bootstrap.sh
+  $ ./configure [--enable-debug] [--enable-gprof] [--enable-gcov]
+  $ make
+  # make install</p>
+
+<p>Here are the default locations of files that trousers installs:</p>
+
+<p>/usr/local/sbin/tcsd
+  /usr/local/etc/tcsd.conf
+  /usr/local/lib/libtspi.so.0.0.X
+  /usr/local/lib/libtspi.so.0 -&gt; libtspi.so.0.0.X
+  /usr/local/lib/libtspi.so -&gt; libtspi.so.0.0.X
+  /usr/local/lib/libtspi.la
+  /usr/local/lib/libtddl.a
+  /usr/local/var/lib/tpm</p>
+
+<p>By default the build will place everything in /usr/local. To install
+in a slightly more predictable place, use <code>./configure --prefix=/usr</code>.</p>
+
+<p>'make install' will run ldconfig, but if /usr/local/lib is not in
+your /etc/ld.so.conf, this won't make a difference. You may need to
+manually add it and run ldconfig as root to allow your apps to link at
+run time to libtspi.so.</p>
+
+<p>BUILDING the TSS 64-bit</p>
+
+<p>TrouSerS has been built and tested on ppc64 and x86_64, so please
+don't hesitate to report bugs on these platforms.  Building everything
+64-bit will require a few more flags than are necessary for a 32-bit
+platform.  Here are some example instructions for ppc64:</p>
+
+<p>$ sh bootstrap.sh
+  $ export PKG_CONFIG_PATH=/usr/lib64/pkgconfig
+  $ CFLAGS="-L/usr/lib64 -L/opt/gnome/lib64" LDFLAGS="-L/usr/lib64 \
+           -L/opt/gnome/lib64" ./configure --libdir="/usr/local/lib64"
+  $ make
+  # make install</p>
+
+<p>Hopefully the above example will get you going on building in your
+64-bit environment.  If you need to do anything special, please send
+your build steps to <a href="mailto:trousers-users@lists.sf.net">trousers-users@lists.sf.net</a> and I'll include it
+here.</p>
+
+<p>USING TROUSERS ON AN ALREADY OWNED TPM</p>
+
+<p>If you've already taken ownership of your TPM using a TSS under another
+operating system, there are a few issues you should be aware of.</p>
+
+<p>Auth vs No-Auth SRK:  In order to trick trousers into thinking it has taken
+ownership of the TPM it's running on, you will need to create a persistent
+storage file for trousers to use.  Normally trousers would create this file
+itself at the time ownership is taken.  If your SRK has been given an
+authorization password by the non-Linux OS, you will need to move the file
+dist/system.data.auth to /usr/local/var/lib/tpm/system.data.  If you've
+taken ownership of your TPM without issuing a password, move
+dist/system.data.noauth to /usr/local/var/lib/tpm/system.data.</p>
+
+<p>Passwords:  When entering passwords for keys you'd like to use in both
+Linux and other OS's, you'll need to take note of how you entered those
+passwords.  The TSS spec states that when a password is entered through a
+GUI popup dialog box provided by the TSS library, the password should be
+converted to the UTF-16 encoding and then hashed using SHA-1, including
+the UTF-16 null terminator in the hash calculation.</p>
+
+<p>In order to work around this problem, specify the -u option to the
+tpm-tools command line to convert the password to UTF-16 before hashing.
+This, however, unfolds yet another problem...</p>
+
+<p>Some TSS stacks aren't compliant with the TSS spec, in that they hash
+their passwords without including the terminating null character.  This
+means that there are effectively two versions of any password set through
+a popup dialog box.  Trousers will include the terminating null character
+in its hashes of UTF-16 data.</p>
+
+<p>We'll do our best to track other TSS software and how it behaves.  Please
+see the trousers FAQ at <a href="http://trousers.sf.net">http://trousers.sf.net</a> for more information.</p>
+
+<p>ARCHITECTURE</p>
+
+<p>This TSS implementation has several components.</p>
+
+<p>A) The TCS Daemon - A user space daemon that should be (according to
+     the TSS spec) the only portal to the TPM device driver. At boot
+     time, the TCS Daemon should be started, it should open the TPM
+     device driver and from that point on, all requests to the TPM
+     should go through the TSS stack. The TCSD manages TPM resources
+     and handles requests from TSP's both local and remote.</p>
+
+<p>B) The TSP shared library - The TSP (TCG Service Provider) is a
+     shared library that enables applications to talk to TCSD's both
+     locally and remotely. The TSP also manages resources used in
+     commicating with the application and the TCSD and transparently
+     contacts the TCSD whenever necessary.</p>
+
+<p>C) Persistent Storage (PS) files - TSS's have 2 different kinds of
+     PS for keys.  PS can be thought of as a database for keys, with
+     each key in the database indexed by a UUID.</p>
+
+<pre><code> 'User' persistent storage is maintained by the application's TSP
+ library.  Upon writing the first key to User PS, the TSP library
+ creates a new file at ~/.trousers/user.data, using the effective
+ user id of the process executing the call to find ~. An environment
+ variable, TSS_USER_PS_FILE, can also be set to point the TSP library
+ to a different location for the User PS. This environment variable
+ has the lifetime of the TSP context, so to store 2 keys in 2
+ different files, you will need to call Tspi_Context_Close, set the
+ new location, and open the context again.
+
+ 'System' persistent storage is controlled by the TCS and stays
+ valid across all application lifetimes, TCSD restarts and system
+ resets. Data registered in system PS stays valid until an application
+ requests that it be removed. The System PS file by default is
+ /usr/local/var/lib/tpm/system.data. The system PS file is initially
+ created when ownership of the TPM is first taken.
+</code></pre>
+
+<p>D) A config file. By default located in /usr/local/etc/tcsd.conf.</p>
+
+<p>RUNNING the TSS</p>
+
+<p>By default, the TCS daemon is not reachable over the internet, so if
+you just plan to access it locally, running it as root with a root owned
+device node is probably ok.  Just make sure your device driver is loaded
+and start the tcsd as root.</p>
+
+<p>If you would like to run the TCS daemon as an unprivleged user,
+please follow these instructions:</p>
+
+<p>If you're using the device driver from a linux 2.6.12+ kernel and have
+udev enabled, you need to add the following line to your
+udev.permissions file (usually in /etc/udev somewhere):</p>
+
+<p>tpm[0-9]:tss:tss:0600</p>
+
+<p>and then just load the device driver with:
+  # modprobe tpm_atmel
+  or,
+  # modprobe tpm_natl</p>
+
+<p>start the TCS Core Services daemon, by default /usr/local/sbin/tcsd.
+  # /usr/local/sbin/tcsd</p>
+
+<p>If you're attempting to make the TCS Core Services daemon communicate with a
+softwware TPM through TCP, you must call it using the -e option. </p>
+
+<p># /usr/local/sbin/tcsd -e</p>
+
+<p>The default values for hostname, port and UN socket device path are  "localhost", 
+"6545" and "/var/run/tpm/tpmd_socket:0". It will search for the IN socket device,
+then for an UN socket one, and then for the real TPM in this order.
+The default values match with the current open source project required values, if
+for instance case you need to set values of your choice, the environment variables 
+for them are TCSD_TCP_DEVICE_HOSTNAME, TCSD_TCP_DEVICE_PORT if using an IN socket 
+and TCSD_UN_SOCKET_DEVICE_PATH if running an UN socket.</p>
+
+<p>DEBUGGING</p>
+
+<p>If you've compiled trousers with './configure --enable-debug' and would like
+to turn debugging output off at run-time, set the environment variable
+TSS_DEBUG_OFF to any value.</p>
+
+<p>BUILDING a TSS RPM</p>
+
+<p># sh bootstrap.sh
+ # ./configure
+ # cd ..
+ # mv trousers trousers-${version}
+ # tar zcvf /usr/src/packages/SOURCES/trousers-${version}.tar.gz \
+            trousers-${version}
+ # rpmbuild -bb trousers-${version}/dist/trousers.spec</p>
+
+<p>EOF</p>
+        </section>
+
+        <footer>
+          Trousers is maintained by <a href="https://github.com/Distrotech">Distrotech</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
