@@ -28,7 +28,9 @@ tcsd \- daemon that manages Trusted Computing resources
 .hy 0
 .B tcsd
 .RB [ \-f ]
+.RB [ \-e ]
 .RB [ \-c\ <configfile>\ ]
+.RB [ \-h ]
 
 .SH "DESCRIPTION"
 .PP
@@ -44,12 +46,20 @@ requests to the TPM should go through the TSS stack. The \fBtcsd\fR manages TPM
 resources and handles requests from TSP's both local and remote.
 
 .TP
-\fB\-f\fR
+\fB\-f,\ \-\-foreground\fR
 run the daemon in the foreground
 
 .TP
-\fB\-c <configfile>\fR
+\fB\-e\fR
+attempt to connect to software TPMs over TCP
+
+.TP
+\fB\-c,\ \-\-config <configfile>\fR
 use the provided configuration file rather than the default configuration file
+
+.TP
+\fB\-h,\ \-\-help\fR
+display help message
 
 .SH "ACCESS CONTROL"
 .PP
