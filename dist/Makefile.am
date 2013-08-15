@@ -15,3 +15,5 @@ install-exec-hook:
 uninstall-hook:
 	/usr/sbin/userdel tss || true
 	/usr/sbin/groupdel tss || true
+	rm ${DESTDIR}/@sysconfdir@/tcsd.conf
+	rmdir ${DESTDIR}/@localstatedir@/lib/tpm
