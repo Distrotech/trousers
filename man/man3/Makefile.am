@@ -75,7 +75,7 @@ man3_MANS = Tspi_ChangeAuth.3 \
 	    Tspi_TPM_TakeOwnership.3 \
 	    Tspi_TPM_GetAuditDigest.3 \
 	    Tspi_TPM_OwnerGetSRKPubKey.3 \
-	    Tspi_TPM_Quote.3 \
+	    Tspi_TPM_Quote2.3 \
 	    Tspi_TPM_CMKSetRestrictions.3
 if TSS_BUILD_DAA
 man3_MANS += Tspi_DAA_IssueCredential.3 \
