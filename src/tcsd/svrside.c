@@ -335,10 +335,19 @@ int setup_server_sockets(struct srv_sock_info ssi[])
 	int i=0;
 
 	ssi[0].sd = ssi[1].sd = -1;
-	// Only enqueue sockets successfully bound.
-	if (setup_ipv4_socket(&ssi[i]) == 0)
-		i++;
-	setup_ipv6_socket(&ssi[i]);
+	// Only enqueue sockets successfully bound or that weren't disabled.
+	if (tcsd_options.disable_ipv4) {
+		LogWarn("IPv4 support disabled by configuration option");
+	} else {
+		if (setup_ipv4_socket(&ssi[i]) == 0)
+			i++;
+	}
+
+	if (tcsd_options.disable_ipv6) {
+		LogWarn("IPv6 support disabled by configuration option");
+	} else {
+		setup_ipv6_socket(&ssi[i]);
+	}
 
 	// It's only a failure if both sockets are unavailable.
 	if ((ssi[0].sd == -1) && (ssi[1].sd == -1)) {
