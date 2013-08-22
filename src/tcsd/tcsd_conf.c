@@ -51,6 +51,8 @@ struct tcsd_config_options options_list[] = {
 	{"enforce_exclusive_transport", opt_exclusive_transport},
 	{"host_platform_class", opt_host_platform_class},
 	{"all_platform_classes", opt_all_platform_classes},
+	{"disable_ipv4", opt_disable_ipv4},
+	{"disable_ipv6", opt_disable_ipv6},
 	{NULL, 0}
 };
 
@@ -83,6 +85,8 @@ init_tcsd_config(struct tcsd_config *conf)
 	conf->exclusive_transport = 0;
 	conf->host_platform_class = NULL;
 	conf->all_platform_classes = NULL;
+	conf->disable_ipv4 = 0;
+	conf->disable_ipv6 = 0;
 }
 
 TSS_RESULT
@@ -162,6 +166,12 @@ config_set_defaults(struct tcsd_config *conf)
 
 	if (conf->unset & TCSD_OPTION_HOST_PLATFORM_CLASS)
 		platform_class_list_append(conf, "PC_12", TRUE);
+
+	if (conf->unset & TCSD_OPTION_DISABLE_IPV4)
+		conf->disable_ipv4 = TCSD_DEFAULT_DISABLE_IPV4;
+
+	if (conf->unset & TCSD_OPTION_DISABLE_IPV6)
+		conf->disable_ipv6 = TCSD_DEFAULT_DISABLE_IPV6;
 }
 
 int
@@ -625,6 +635,29 @@ read_conf_line(char *buf, int line_num, struct tcsd_config *conf)
 					 "%s:%d: \"%s\"", tcsd_config_file, line_num, comma);
 				return result;
 			}
+		}
+		break;
+	case opt_disable_ipv4:
+		tmp_int = atoi(arg);
+		if (tmp_int < 0 || tmp_int > 1) {
+			LogError("Config option \"disable_ipv4\" out of range."
+				 " %s:%d: \"%d\"", tcsd_config_file, line_num, tmp_int);
+			return TCSERR(TSS_E_INTERNAL_ERROR);
+		} else {
+			conf->disable_ipv4 = tmp_int;
+			conf->unset &= ~TCSD_OPTION_DISABLE_IPV4;
+		}
+
+		break;
+	case opt_disable_ipv6:
+		tmp_int = atoi(arg);
+		if (tmp_int < 0 || tmp_int > 1) {
+			LogError("Config option \"disable_ipv6\" out of range."
+				 " %s:%d: \"%d\"", tcsd_config_file, line_num, tmp_int);
+			return TCSERR(TSS_E_INTERNAL_ERROR);
+		} else {
+			conf->disable_ipv6 = tmp_int;
+			conf->unset &= ~TCSD_OPTION_DISABLE_IPV6;
 		}
 		break;
 	default:
