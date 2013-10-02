@@ -519,35 +519,36 @@ int
 access_control(struct tcsd_thread_data *thread_data)
 {
 	int i = 0;
-	struct hostent *local_hostent = NULL;
-	static char *localhostname = NULL;
-	static int localhostname_len = 0;
+	int is_localhost;
+	struct sockaddr_storage sas;
+	struct sockaddr *sa;
+	socklen_t sas_len = sizeof(sas);
 
-	if (!localhostname) {
-		if ((local_hostent = gethostbyname("localhost")) == NULL) {
-			LogError("Error resolving localhost: %s", hstrerror(h_errno));
-			return 1;
-		}
+	if (!getpeername(thread_data->sock, (struct sockaddr *)&sas, &sas_len)) {
+		LogError("Error retrieving local socket address: %s", strerror(errno));
+		return 1;
+	}
 
-		LogDebugFn("Cached local hostent:");
-		LogDebugFn("h_name: %s", local_hostent->h_name);
-		for (i = 0; local_hostent->h_aliases[i]; i++) {
-			LogDebugFn("h_aliases[%d]: %s", i, local_hostent->h_aliases[i]);
-		}
-		LogDebugFn("h_addrtype: %s",
-			   (local_hostent->h_addrtype == AF_INET6 ? "AF_INET6" : "AF_INET"));
+	sa = (struct sockaddr *)&sas;
 
-		localhostname_len = strlen(local_hostent->h_name);
-		if ((localhostname = strdup(local_hostent->h_name)) == NULL) {
-			LogError("malloc of %d bytes failed.", localhostname_len);
-			return TCSERR(TSS_E_OUTOFMEMORY);
-		}
+	is_localhost = 0;
+	// Check if it's localhost for both inet protocols
+	if (sa->sa_family == AF_INET) {
+		struct sockaddr_in *sa_in = (struct sockaddr_in *)sa;
+		uint32_t nloopaddr = htonl(INADDR_LOOPBACK);
+		if (memcmp(&sa_in->sin_addr.s_addr, &nloopaddr,
+					sizeof(struct sockaddr_in)) == 0)
+			is_localhost = 1;
+	else if (sa->sa_family == AF_INET6) {
+		struct sockaddr_in6 *sa_in6 = (struct sockaddr_in6 *)sa;
+		if (memcmp(&sa_in6->sin6_addr.s6_addr, &in6addr_loopback,
+					sizeof(struct sockaddr_in6)) == 0)
+			is_localhost = 1;
 	}
 
 	/* if the request comes from localhost, or is in the accepted ops list,
 	 * approve it */
-	if (!strncmp(thread_data->hostname, localhostname,
-		     MIN((size_t)localhostname_len, strlen(thread_data->hostname)))) {
+	if (is_localhost)
 		return 0;
 	} else {
 		while (tcsd_options.remote_ops[i]) {
