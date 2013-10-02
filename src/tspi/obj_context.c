@@ -30,7 +30,6 @@ obj_context_add(TSS_HOBJECT *phObject)
 {
 	TSS_RESULT result;
 	struct tr_context_obj *context = calloc(1, sizeof(struct tr_context_obj));
-	unsigned len = strlen(TSS_LOCALHOST_STRING) + 1;
 
 	if (context == NULL) {
 		LogError("malloc of %zd bytes failed.", sizeof(struct tr_context_obj));
@@ -42,13 +41,13 @@ obj_context_add(TSS_HOBJECT *phObject)
 #else
 	context->silentMode = TSS_TSPATTRIB_CONTEXT_SILENT;
 #endif
-	if ((context->machineName = calloc(1, len)) == NULL) {
-		LogError("malloc of %u bytes failed", len);
+	if ((result = get_tcsd_hostname(&context->machineName,
+					&context->machineNameLength)) != TSS_SUCCESS) {
 		free(context);
-		return TSPERR(TSS_E_OUTOFMEMORY);
+		return result;
 	}
-	memcpy(context->machineName, TSS_LOCALHOST_STRING, len);
-	context->machineNameLength = len;
+
+	LogDebug("Hostname to be used by the context is %s.", context->machineName);
 
 	context->hashMode = TSS_TSPATTRIB_HASH_MODE_NOT_NULL;
 	context->connection_policy = TSS_TSPATTRIB_CONTEXT_VERSION_V1_1;
@@ -186,6 +185,7 @@ obj_context_get_machine_name(TSS_HCONTEXT tspContext, UINT32 *size, BYTE **data)
 	if (context->machineNameLength == 0) {
 		*data = NULL;
 		*size = 0;
+		LogDebug("context->machineName is NULL.");
 	} else {
 		/*
 		 * Don't use calloc_tspi because this memory is
@@ -199,6 +199,7 @@ obj_context_get_machine_name(TSS_HCONTEXT tspContext, UINT32 *size, BYTE **data)
 			goto done;
 		}
 		*size = context->machineNameLength;
+		LogDebug("context->machineName: %s.", context->machineName);
 		memcpy(*data, context->machineName, *size);
 	}
 
