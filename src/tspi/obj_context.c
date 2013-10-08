@@ -23,7 +23,7 @@
 #include "capabilities.h"
 #include "tsplog.h"
 #include "obj.h"
-
+#include "tsp_tcsi_param.h"
 
 TSS_RESULT
 obj_context_add(TSS_HOBJECT *phObject)
@@ -41,7 +41,7 @@ obj_context_add(TSS_HOBJECT *phObject)
 #else
 	context->silentMode = TSS_TSPATTRIB_CONTEXT_SILENT;
 #endif
-	if ((result = get_tcsd_hostname(&context->machineName,
+	if ((result = get_tcsd_hostname((char **)&context->machineName,
 					&context->machineNameLength)) != TSS_SUCCESS) {
 		free(context);
 		return result;

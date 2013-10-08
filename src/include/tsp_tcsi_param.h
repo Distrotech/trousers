@@ -17,3 +17,11 @@
 #define HOSTNAME_ENV_VAR "TSS_TCSD_HOSTNAME"
 
 #define TCP_PORT_STR_MAX_LEN 6
+
+/* Prototypes for functions which retrieve tcsd hostname and port
+ * information */
+TSS_RESULT
+get_tcsd_port(char port_str[TCP_PORT_STR_MAX_LEN]);
+
+TSS_RESULT
+get_tcsd_hostname(char **host_str, unsigned *len);
