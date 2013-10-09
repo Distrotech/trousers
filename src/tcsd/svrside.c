@@ -441,6 +441,10 @@ main(int argc, char **argv)
 	if ((result = tcsd_startup()))
 		return (int)result;
 
+#ifdef NOUSERCHECK
+    LogWarn("will not switch user or check for file permissions. "
+            "(Compiled with --disable-usercheck)");
+#else
 #ifndef SOLARIS
 	pwd = getpwnam(TSS_USER_NAME);
 	if (pwd == NULL) {
@@ -453,6 +457,7 @@ main(int argc, char **argv)
 		return TCSERR(TSS_E_INTERNAL_ERROR);
 	}
 	setuid(pwd->pw_uid);
+#endif
 #endif
 
 	if (setup_server_sockets(socks_info) == -1) {

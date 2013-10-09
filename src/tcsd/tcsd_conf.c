@@ -770,6 +770,7 @@ conf_file_init(struct tcsd_config *conf)
 		}
 	}
 
+#ifndef NOUSERCHECK
 #ifndef SOLARIS
 	/* find the gid that owns the conf file */
 	errno = 0;
@@ -809,6 +810,7 @@ conf_file_init(struct tcsd_config *conf)
 		return TCSERR(TSS_E_INTERNAL_ERROR);
 	}
 #endif /* SOLARIS */
+#endif /* NOUSERCHECK */
 
 	if ((f = fopen(tcsd_config_file, "r")) == NULL) {
 		LogError("fopen(%s): %s", tcsd_config_file, strerror(errno));

@@ -86,6 +86,13 @@ AC_ARG_ENABLE(strict-spec-compliance,
 		 SPEC_COMP=1
 		 AC_MSG_RESULT([*** Enabling spec compliance at user request ***])],)
 
+# user+group checking
+AC_ARG_ENABLE(usercheck,
+		[AC_HELP_STRING([--disable-usercheck], [build TrouSerS without checking and setting of user/group tss [default=on] (Caution: This is intended for development purposes only.)])],
+		[AS_IF([test "x$enableval" = "xno"], [CFLAGS="$CFLAGS -DNOUSERCHECK"
+		AC_MSG_RESULT([*** Disabling user checking at user request ***])])],)
+AM_CONDITIONAL(NOUSERCHECK, [test "x$enable_usercheck" = "xno"])
+
 # daa math lib: gmp or openssl (default openssl)
 MATH_DEFINE=BI_OPENSSL
 AC_ARG_WITH([gmp],
