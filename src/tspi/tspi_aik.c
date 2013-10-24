@@ -182,8 +182,10 @@ Tspi_TPM_CollateIdentityRequest(TSS_HTPM hTPM,				/* in */
 		return result;
 
 	if ((result = authsess_xsap_init(tspContext, hTPM, hIdentityKey, TSS_AUTH_POLICY_REQUIRED,
-					 TPM_ORD_MakeIdentity, TPM_ET_OWNER, &xsap)))
+					 TPM_ORD_MakeIdentity, TPM_ET_OWNER, &xsap))){
+		free(asymParms.parms);
 		return result;
+	}
 
 	/* Hash the Auth data */
 	result = Trspi_HashInit(&hashCtx, TSS_HASH_SHA1);
@@ -392,6 +394,7 @@ Tspi_TPM_CollateIdentityRequest(TSS_HTPM hTPM,				/* in */
 error:
 	authsess_free(xsap);
 	free_key_refs(&caKey);
+	free(asymParms.parms);
 	free(prgbIdentityBinding);
 	free(prgbEndorsementCredential);
 	free(prgbPlatformCredential);
