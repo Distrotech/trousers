@@ -68,7 +68,7 @@ TSS_RESULT obj_nvstore_create_pcrshortinfo(TSS_HNVSTORE, TSS_HPCRS, UINT32 *, BY
 
 #define NVSTORE_LIST_DECLARE		struct obj_list nvstore_list
 #define NVSTORE_LIST_DECLARE_EXTERN	extern struct obj_list nvstore_list
-#define NVSTORE_LIST_INIT()		list_init(&nvstore_list)
+#define NVSTORE_LIST_INIT()		tspi_list_init(&nvstore_list)
 #define NVSTORE_LIST_CONNECT(a,b)	obj_connectContext_list(&nvstore_list, a, b)
 #define NVSTORE_LIST_CLOSE(a)		obj_list_close(&nvstore_list, &nvstore_free, a)
 #else
