@@ -39,7 +39,7 @@ host_table_init()
 #pragma init(_init)
 void _init(void)
 #else
-void __attribute__ ((constructor)) my_init(void)
+static void __attribute__ ((constructor)) my_init(void)
 #endif
 {
 	host_table_init();
@@ -73,7 +73,7 @@ host_table_final()
 #pragma fini(_fini)
 void _fini(void)
 #else
-void __attribute__ ((destructor)) my_fini(void)
+static void __attribute__ ((destructor)) my_fini(void)
 #endif
 {
 	host_table_final();
