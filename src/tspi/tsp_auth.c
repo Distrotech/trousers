@@ -359,7 +359,7 @@ validateReturnAuth(BYTE *secret, BYTE *hash, TPM_AUTH *auth)
 	memcpy(digest, &auth->HMAC, 20);
 	HMAC_Auth(secret, hash, auth);
 
-	return ((TSS_BOOL) memcmp(digest, &auth->HMAC, 20) != 0);
+	return ((TSS_BOOL) (memcmp(digest, &auth->HMAC, 20) != 0));
 }
 
 void
