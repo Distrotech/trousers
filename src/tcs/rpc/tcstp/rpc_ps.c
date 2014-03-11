@@ -505,7 +505,7 @@ UnloadBlob_KM_KEYINFO(UINT64 *offset, BYTE *blob, TSS_KM_KEYINFO *info)
 	UnloadBlob_VERSION(offset, blob, (TPM_VERSION *)&(info->versionInfo));
 	UnloadBlob_UUID(offset, blob, &info->keyUUID);
 	UnloadBlob_UUID(offset, blob, &info->parentKeyUUID);
-	UnloadBlob_BYTE(offset, blob, &info->bAuthDataUsage);
+	UnloadBlob_BYTE(offset, &info->bAuthDataUsage, blob);
 	UnloadBlob_BOOL(offset, &info->fIsLoaded, blob);
 	UnloadBlob_UINT32(offset, &info->ulVendorDataLength, blob);
 	UnloadBlob(offset, info->ulVendorDataLength, info->rgbVendorData, blob);
