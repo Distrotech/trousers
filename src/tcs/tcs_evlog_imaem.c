@@ -50,6 +50,8 @@
 
 #ifdef EVLOG_SOURCE_IMA
 
+#define EVLOG_FILENAME_MAXSIZE 255
+
 struct ext_log_source ima_source = {
 	ima_open,
 	ima_get_entries_by_pcr,
@@ -84,7 +86,7 @@ ima_get_entries_by_pcr(FILE *handle, UINT32 pcr_index, UINT32 first,
 	TSS_RESULT result = TCSERR(TSS_E_INTERNAL_ERROR);
 	FILE *fp = (FILE *) handle;
 	uint len;
-	char name[255];
+	char name[EVLOG_FILENAME_MAXSIZE];
 
 	if (!fp) {
 		LogError("File handle is NULL!\n");
@@ -132,8 +134,12 @@ ima_get_entries_by_pcr(FILE *handle, UINT32 pcr_index, UINT32 first,
 			result = TCSERR(TSS_E_INTERNAL_ERROR);
 			goto free_list;
 		}
-		
-		memset(name, 0, sizeof name);
+		if (len > EVLOG_FILENAME_MAXSIZE) {
+			LogError("Event log file name too big! Max size is %d", EVLOG_FILENAME_MAXSIZE);
+			result = TCSERR(TSS_E_INTERNAL_ERROR);
+			goto free_list;
+		}
+		memset(name, 0, EVLOG_FILENAME_MAXSIZE);
 		if (fread(name, 1, len, fp) != len) {
 			LogError("Failed to read event log file");
 			result = TCSERR(TSS_E_INTERNAL_ERROR);
@@ -229,7 +235,7 @@ ima_get_entry(FILE *handle, UINT32 pcr_index, UINT32 *num, TSS_PCR_EVENT **ppEve
 	TSS_RESULT result = TCSERR(TSS_E_INTERNAL_ERROR);
 	TSS_PCR_EVENT *event = NULL;
 	FILE *fp = (FILE *) handle;
-	char name[255];
+	char name[EVLOG_FILENAME_MAXSIZE];
 
 	rewind(fp);
 	while (fread(page, 24, 1, fp)) {
@@ -269,7 +275,13 @@ ima_get_entry(FILE *handle, UINT32 pcr_index, UINT32 *num, TSS_PCR_EVENT **ppEve
 						result = TCSERR(TSS_E_INTERNAL_ERROR);
 						goto done;
 					}
-					memset(name, 0, sizeof name);
+					if (len > EVLOG_FILENAME_MAXSIZE) {
+						free(event);
+						LogError("Event log file name too big! Max size is %d", EVLOG_FILENAME_MAXSIZE);
+						result = TCSERR(TSS_E_INTERNAL_ERROR);
+						goto done;
+					}
+					memset(name, 0, EVLOG_FILENAME_MAXSIZE);
 					if (fread(name, 1, len, fp) != len) {
 						free(event);
 						LogError("Failed to read event log file");
