@@ -44,7 +44,6 @@ struct tcsd_config tcsd_options;
 struct tpm_properties tpm_metrics;
 static volatile int hup = 0, term = 0;
 extern char *optarg;
-int sd;
 char *tcsd_config_file = NULL;
 
 struct srv_sock_info {
@@ -72,7 +71,6 @@ static void
 tcsd_signal_term(int signal)
 {
 	term = 1;
-	close(sd);
 }
 
 void
@@ -324,7 +322,7 @@ int setup_ipv6_socket(struct srv_sock_info *ssi)
 	return 0;
 
  err:
-	if (sd != -1)
+	if (sd6 != -1)
 		close(sd6);
 
 	return -1;
