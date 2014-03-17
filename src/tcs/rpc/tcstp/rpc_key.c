@@ -430,7 +430,7 @@ tcs_wrap_KeyControlOwner(struct tcsd_thread_data *data)
 	TCS_CONTEXT_HANDLE hContext;
 	TCS_KEY_HANDLE hKey;
 	UINT32 ulPublicKeyLength;
-	BYTE* rgbPublicKey;
+	BYTE* rgbPublicKey = NULL;
 	UINT32 attribName;
 	TSS_BOOL attribValue;
 	TPM_AUTH ownerAuth;
@@ -481,13 +481,18 @@ tcs_wrap_KeyControlOwner(struct tcsd_thread_data *data)
 
 	if (result == TSS_SUCCESS) {
 		initData(&data->comm, 2);
-		if (setData(TCSD_PACKET_TYPE_AUTH, 0, &ownerAuth, 0, &data->comm))
+		if (setData(TCSD_PACKET_TYPE_AUTH, 0, &ownerAuth, 0, &data->comm)) {
+			free(rgbPublicKey);
 			return TCSERR(TSS_E_INTERNAL_ERROR);
-		if (setData(TCSD_PACKET_TYPE_UUID, 1, &uuidData, 0, &data->comm))
+		}
+		if (setData(TCSD_PACKET_TYPE_UUID, 1, &uuidData, 0, &data->comm)) {
+			free(rgbPublicKey);
 			return TCSERR(TSS_E_INTERNAL_ERROR);
+		}
 	} else
 done:		initData(&data->comm, 0);
 
+	free(rgbPublicKey);
 	data->comm.hdr.u.result = result;
 	return TSS_SUCCESS;
 
