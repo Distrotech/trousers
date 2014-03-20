@@ -95,8 +95,10 @@ obj_delfamily_find_by_familyid(TSS_HOBJECT hObject, UINT32 familyID, TSS_HDELFAM
 	*hFamily = NULL_HDELFAMILY;
 
 	if (obj_is_tpm(hObject)) {
-		if (obj_tpm_get_tsp_context((TSS_HTPM)hObject, &hContext))
+		if (obj_tpm_get_tsp_context((TSS_HTPM)hObject, &hContext)) {
+			pthread_mutex_unlock(&list->lock);
 			return;
+		}
 	} else
 		hContext = (TSS_HCONTEXT)hObject;
 
