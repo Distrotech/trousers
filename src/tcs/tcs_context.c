@@ -134,7 +134,7 @@ destroy_context(TCS_CONTEXT_HANDLE handle)
 
 #ifdef TSS_BUILD_TRANSPORT
 	/* Free existing transport session if necessary */
-	if (toKill->transHandle)
+	if (toKill != NULL && toKill->transHandle)
 		TCSP_FlushSpecific_Common(toKill->transHandle, TPM_RT_TRANS);
 #endif
 
