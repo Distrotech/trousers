@@ -113,7 +113,8 @@ TCSP_SetCapability_Internal(TCS_CONTEXT_HANDLE hContext,	/* in */
 	if ((result = ctx_verify_context(hContext)))
 		goto done;
 
-	if ((result = auth_mgr_check(hContext, &pOwnerAuth->AuthHandle)))
+	if ((pOwnerAuth != NULL) &&
+		(result = auth_mgr_check(hContext, &pOwnerAuth->AuthHandle)))
 		goto done;
 
 	if ((result = tpm_rqu_build(TPM_ORD_SetCapability, &offset, txBlob, capArea, subCapSize,
