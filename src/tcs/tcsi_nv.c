@@ -202,7 +202,7 @@ TCSP_NV_ReadValueAuth_Internal(TCS_CONTEXT_HANDLE hContext,	/* in */
 	LogDebugFn("Enter");
 	if ((result = ctx_verify_context(hContext)))
 		return result;
-	if ((result = auth_mgr_check(hContext, &NVAuth->AuthHandle)))
+	if ((NVAuth != NULL) && (result = auth_mgr_check(hContext, &NVAuth->AuthHandle)))
 		goto done;
 
 	if ((result = tpm_rqu_build(TPM_ORD_NV_ReadValueAuth, &off_set, txBlob, hNVStore, offset,
