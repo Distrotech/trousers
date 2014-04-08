@@ -189,9 +189,10 @@ tcs_wrap_NV_WriteValueAuth(struct tcsd_thread_data *data)
 		free(rgbDataToWrite);
 		return TCSERR(TSS_E_INTERNAL_ERROR);
 	}
-	if (getData(TCSD_PACKET_TYPE_AUTH, 5, &Auth, 0, &data->comm))
-		pAuth = NULL;
-	else
+	if (getData(TCSD_PACKET_TYPE_AUTH, 5, &Auth, 0, &data->comm)) {
+		free(rgbDataToWrite);
+		return TCSERR(TSS_E_INTERNAL_ERROR);
+	} else
 		pAuth = &Auth;
 
 	MUTEX_LOCK(tcsp_lock);
