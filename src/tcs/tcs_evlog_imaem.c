@@ -293,9 +293,9 @@ ima_get_entry(FILE *handle, UINT32 pcr_index, UINT32 *num, TSS_PCR_EVENT **ppEve
 				event->rgbEvent = malloc(event->ulEventLength + 1);
 				if (event->rgbEvent == NULL) {
 					free(event->rgbPcrValue);
-					free(event);
 					LogError("malloc of %u bytes failed.",
 							event->ulEventLength);
+					free(event);
 					result = TCSERR(TSS_E_OUTOFMEMORY);
 					goto done;
 				}
