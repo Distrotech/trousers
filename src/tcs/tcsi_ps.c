@@ -610,6 +610,8 @@ TCSP_GetRegisteredKeyByPublicInfo_Internal(TCS_CONTEXT_HANDLE tcsContext,	/* in 
 	TCPA_STORE_PUBKEY pubKey;
 	TSS_RESULT result = TCSERR(TSS_E_FAIL);
 
+	pubKey.key = NULL;
+
 	if ((result = ctx_verify_context(tcsContext)))
 		return result;
 

@@ -462,7 +462,7 @@ TSS_RESULT
 get_socket(struct host_table_entry *hte, int *sd)
 {
 	char port_str[TCP_PORT_STR_MAX_LEN]; // To accomodate string 65535
-	struct addrinfo hints, *res, *p;
+	struct addrinfo hints, *p, *res=NULL;
 	int rv;
 	TSS_RESULT result = TSS_SUCCESS;
 
