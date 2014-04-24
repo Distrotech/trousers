@@ -1,3 +1,10 @@
+* TROUSERS_0_3_13
+- Changed exported functions which had a name too common, to avoid collision
+- Assessed daemon security using manual techniques and coverit
+- Fixed major security bugs and memory leaks
+- Added debug support to run tcsd with a different user/group
+- Daemon now properly closes sockets before shutting down
+
 * TROUSERS_0_3_12
 - Added new network code for RPC, which supports IPv6
 - Users of client applications can configure the hostname of the tcsd server
