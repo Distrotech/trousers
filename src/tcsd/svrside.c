@@ -54,9 +54,28 @@ struct srv_sock_info {
 #define MAX_IP_PROTO 2
 #define INVALID_ADDR_STR "<Invalid client address>"
 
-static void
-tcsd_shutdown(void)
+static void close_server_socks(struct srv_sock_info *socks_info)
 {
+	int i, rv;
+
+	for (i=0; i < MAX_IP_PROTO; i++) {
+		if (socks_info[i].sd != -1) {
+			do {
+				rv = close(socks_info[i].sd);
+				if (rv == -1 && errno != EINTR) {
+					LogError("Error closing server socket descriptor - %s",
+							strerror(errno));
+					continue;
+				}
+			} while (rv == -1 && errno == EINTR);
+		}
+	}
+}
+
+static void
+tcsd_shutdown(struct srv_sock_info socks_info[])
+{
+	close_server_socks(socks_info);
 	/* order is important here:
 	 * allow all threads to complete their current request */
 	tcsd_threads_final();
@@ -218,7 +237,7 @@ reload_config(void)
 	return result;
 }
 
-int setup_ipv4_socket(struct srv_sock_info *ssi)
+int setup_ipv4_socket(struct srv_sock_info ssi[])
 {
 	struct sockaddr_in serv_addr;
 	int sd, opt;
@@ -466,7 +485,7 @@ main(int argc, char **argv)
 	if (getenv("TCSD_FOREGROUND") == NULL) {
 		if (daemon(0, 0) == -1) {
 			perror("daemon");
-			tcsd_shutdown();
+			tcsd_shutdown(socks_info);
 			return -1;
 		}
 	}
@@ -546,6 +565,6 @@ main(int argc, char **argv)
 	} while (term ==0);
 
 	/* To close correctly, we must receive a SIGTERM */
-	tcsd_shutdown();
+	tcsd_shutdown(socks_info);
 	return 0;
 }
