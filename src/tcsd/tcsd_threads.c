@@ -165,7 +165,8 @@ out:
 	/* cleanup in case of error */
 	if (rc != TCS_SUCCESS) {
 		if (hostname != NULL) {
-			tm->thread_data[thread_num].hostname = NULL;
+			if (thread_num != -1)
+				tm->thread_data[thread_num].hostname = NULL;
 			free(hostname);
 		}
 		close(socket);
