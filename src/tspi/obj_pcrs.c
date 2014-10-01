@@ -360,8 +360,13 @@ obj_pcrs_get_digest_at_release(TSS_HPCRS hPcrs, UINT32 *size, BYTE **out)
 
 	switch(pcrs->type) {
 		case TSS_PCRS_STRUCT_INFO:
+#ifdef TSS_SPEC_COMPLIANCE
 			result = TSPERR(TSS_E_INVALID_OBJ_ACCESS);
 			goto done;
+#else
+            digest = (BYTE *)&pcrs->info.info11.digestAtRelease;
+            break;
+#endif
 		case TSS_PCRS_STRUCT_INFO_SHORT:
 			digest = (BYTE *)&pcrs->info.infoshort.digestAtRelease;
 			break;
