@@ -524,7 +524,8 @@ access_control(struct tcsd_thread_data *thread_data)
 	struct sockaddr *sa;
 	socklen_t sas_len = sizeof(sas);
 
-	if (!getpeername(thread_data->sock, (struct sockaddr *)&sas, &sas_len)) {
+	if (getpeername(thread_data->sock, (struct sockaddr *)&sas,
+			&sas_len) == -1) {
 		LogError("Error retrieving local socket address: %s", strerror(errno));
 		return 1;
 	}
