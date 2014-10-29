@@ -540,6 +540,7 @@ access_control(struct tcsd_thread_data *thread_data)
 		if (memcmp(&sa_in->sin_addr.s_addr, &nloopaddr,
 					sizeof(in_addr_t)) == 0)
 			is_localhost = 1;
+        }
 	else if (sa->sa_family == AF_INET6) {
 		struct sockaddr_in6 *sa_in6 = (struct sockaddr_in6 *)sa;
 		if (memcmp(&sa_in6->sin6_addr.s6_addr, &in6addr_loopback,
@@ -551,7 +552,7 @@ access_control(struct tcsd_thread_data *thread_data)
 	 * approve it */
 	if (is_localhost)
 		return 0;
-	} else {
+	else {
 		while (tcsd_options.remote_ops[i]) {
 			if ((UINT32)tcsd_options.remote_ops[i] == thread_data->comm.hdr.u.ordinal) {
 				LogInfo("Accepted %s operation from %s",
