@@ -543,7 +543,7 @@ access_control(struct tcsd_thread_data *thread_data)
 	else if (sa->sa_family == AF_INET6) {
 		struct sockaddr_in6 *sa_in6 = (struct sockaddr_in6 *)sa;
 		if (memcmp(&sa_in6->sin6_addr.s6_addr, &in6addr_loopback,
-					sizeof(struct sockaddr_in6)) == 0)
+					sizeof(struct in6_addr)) == 0)
 			is_localhost = 1;
 	}
 
