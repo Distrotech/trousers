@@ -97,6 +97,8 @@ Tspi_Context_Connect(TSS_HCONTEXT tspContext,	/* in */
 		if ((result = obj_context_set_machine_name(tspContext, machine_name,
 						strlen((char *)machine_name)+1)))
 			return result;
+
+        free(machine_name);
 	}
 
         if ((obj_tpm_add(tspContext, &hTpm)))

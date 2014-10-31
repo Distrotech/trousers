@@ -272,7 +272,14 @@ obj_context_set_machine_name(TSS_HCONTEXT tspContext, BYTE *name, UINT32 len)
 	context = (struct tr_context_obj *)obj->data;
 
 	free(context->machineName);
-	context->machineName = name;
+
+    context->machineName = (BYTE *)calloc(1, len);
+    if (context->machineName == NULL) {
+        LogError("malloc of %u bytes failed.", len);
+        return TSPERR(TSS_E_OUTOFMEMORY);
+    }
+    memcpy(context->machineName, name, len);
+
 	context->machineNameLength = len;
 
 	obj_list_put(&context_list);
