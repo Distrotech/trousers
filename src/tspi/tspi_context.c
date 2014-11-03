@@ -55,8 +55,6 @@ Tspi_Context_Close(TSS_HCONTEXT tspContext)	/* in */
 	/* Destroy all objects */
 	obj_close_context(tspContext);
 
-	Tspi_Context_FreeMemory(tspContext, NULL);
-
 	/* close the ps file */
 	PS_close();
 
