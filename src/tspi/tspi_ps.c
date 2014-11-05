@@ -107,7 +107,7 @@ Tspi_Context_LoadKeyByUUID(TSS_HCONTEXT tspContext,		/* in */
 
 			result = obj_rsakey_set_pubkey(*phKey, FALSE, rgbPubKey);
 
-			free(rgbPubKey);		
+			free_tspi(tspContext,rgbPubKey);		
 			if (result != TSS_SUCCESS)
 				return result;
 		} else {
