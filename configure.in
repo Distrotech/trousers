@@ -35,12 +35,18 @@ fi
 
 # Arch specific stuff
 case $target in
+	*darwin*)
+        	TCSD_LDFLAGS=""
+        	;;
 	*solaris*)
 		CFLAGS="$CFLAGS -DSOLARIS"
 		;;
         *)
+        	TCSD_LDFLAGS="-pie -Wl,-z,relro -Wl,-z,now"
                 ;;
 esac
+
+AC_SUBST(TCSD_LDFLAGS)
 
 # Non-standard OpenSSL location
 AC_MSG_CHECKING([Non-standard OpenSSL location])

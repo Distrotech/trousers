@@ -11,7 +11,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+
+#ifndef __APPLE__
 #include <bits/local_lim.h>
+#else
+#define HOST_NAME_MAX 64
+#endif
+
 #include "trousers/tss.h"
 #include "trousers/trousers.h"
 #include "trousers_types.h"
